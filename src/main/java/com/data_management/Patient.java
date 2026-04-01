@@ -53,5 +53,7 @@ public class Patient {
      */
     public List<PatientRecord> getRecords(long startTime, long endTime) {
         // TODO Implement and test this method
+        List<PatientRecord> pr = new ArrayList<PatientRecord>();
+        return pr;
     }
 }
