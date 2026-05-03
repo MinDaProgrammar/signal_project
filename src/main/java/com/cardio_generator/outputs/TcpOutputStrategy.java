@@ -6,12 +6,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 
+/**
+ * Sends each measurement as one comma-separated line to the first TCP client that connects.
+ * The server accepts connections in a background thread; {@link #output} does nothing until a client is connected.
+ */
 public class TcpOutputStrategy implements OutputStrategy {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private PrintWriter out;
 
+    /**
+     * Listens on {@code port} and waits for one client in the background.
+     * Errors go to stderr ~ if binding fails the object may not work.
+     *
+     * @param port port number to listen on
+     */
     public TcpOutputStrategy(int port) {
         try {
             serverSocket = new ServerSocket(port);
@@ -32,6 +42,14 @@ public class TcpOutputStrategy implements OutputStrategy {
         }
     }
 
+    /**
+     * Sends one line: {@code patientId,timestamp,label,data} if a client is connected
+     *
+     * @param patientId patient id
+     * @param timestamp ms since epoch
+     * @param label reading type
+     * @param data value text
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         if (out != null) {

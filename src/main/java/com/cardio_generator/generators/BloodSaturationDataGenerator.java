@@ -4,10 +4,19 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+/**
+ * Fake blood oxygen (saturation) per patient ~ values drift a little and stay between 90% and 100%
+ * written with a {@code "%"} on the end.
+ */
 public class BloodSaturationDataGenerator implements PatientDataGenerator {
     private static final Random random = new Random();
     private int[] lastSaturationValues;
 
+    /**
+     * Sets up storage and picks a starting saturation between 95 and 100 for each patient.
+     *
+     * @param patientCount how many patients
+     */
     public BloodSaturationDataGenerator(int patientCount) {
         lastSaturationValues = new int[patientCount + 1];
 
@@ -17,6 +26,12 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
         }
     }
 
+    /**
+     * Nudges this patient's saturation up or down a bit, keeps it between 90-100 and sends it to the output.
+     *
+     * @param patientId which patient
+     * @param outputStrategy where to send the percentage string
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
