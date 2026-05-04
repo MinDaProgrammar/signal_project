@@ -1,37 +1,64 @@
 package data_management;
 
-
-import com.data_management.DataReader;
 import com.data_management.DataStorage;
 import com.data_management.PatientRecord;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class DataStorageTest {
 
-    void testAddAndGetRecords() {
-        // TODO Perhaps you can implement a mock data reader to mock the test data?
-        //DataReader reader
-        DataStorage reader = new DataStorage();
-        DataStorage storage = new DataStorage(reader);
+    private DataStorage storage;
+
+    @BeforeEach
+    void setUp() {
+        storage = new DataStorage();
+    }
+
+    @Test
+    void testAddAndRetrieveSingleRecord() {
+        storage.addPatientData(1, 100.0, "HeartRate", 1000L);
+        List<PatientRecord> records = storage.getRecords(1, 1000L, 1000L);
+        assertEquals(1, records.size());
+        assertEquals(100.0, records.get(0).getMeasurementValue());
+        assertEquals("HeartRate", records.get(0).getRecordType());
+    }
+
+    @Test
+    void testAddMultipleRecordsSamePatient() {
         storage.addPatientData(1, 100.0, "WhiteBloodCells", 1714376789050L);
         storage.addPatientData(1, 200.0, "WhiteBloodCells", 1714376789051L);
 
         List<PatientRecord> records = storage.getRecords(1, 1714376789050L, 1714376789051L);
-        assertEquals(2, records.size()); // Check if two records are retrieved
-        assertEquals(100.0, records.get(0).getMeasurementValue()); // Validate first record
+        assertEquals(2, records.size());
+        assertEquals(100.0, records.get(0).getMeasurementValue());
+        assertEquals(200.0, records.get(1).getMeasurementValue());
     }
 
-    private void assertEquals(int i, int size) {
-        if(i!=size){
-            throw new AssertionError("The number of records are not matched!");
-        }
+    @Test
+    void testGetRecordsForNonExistentPatient() {
+        List<PatientRecord> records = storage.getRecords(99, 0L, Long.MAX_VALUE);
+        assertTrue(records.isEmpty());
     }
 
-    private void assertEquals(double i, double size) {
-        if(i!=size){
-            throw new AssertionError("The value is not equal to the data in the record!");
-        }
+    @Test
+    void testGetAllPatients() {
+        storage.addPatientData(1, 100.0, "HeartRate", 1000L);
+        storage.addPatientData(2, 98.0, "Saturation", 1001L);
+        assertEquals(2, storage.getAllPatients().size());
+    }
+
+    @Test
+    void testRecordsOutsideTimeRangeNotReturned() {
+        storage.addPatientData(1, 100.0, "HeartRate", 500L);
+        storage.addPatientData(1, 110.0, "HeartRate", 1500L);
+        storage.addPatientData(1, 120.0, "HeartRate", 2500L);
+
+        List<PatientRecord> records = storage.getRecords(1, 1000L, 2000L);
+        assertEquals(1, records.size());
+        assertEquals(110.0, records.get(0).getMeasurementValue());
     }
 }
