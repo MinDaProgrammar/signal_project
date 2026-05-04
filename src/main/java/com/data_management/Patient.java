@@ -47,13 +47,17 @@ public class Patient {
      *
      * @param startTime the start of the time range, in milliseconds since UNIX
      *                  epoch
-     * @param endTime   the end of the time range, in milliseconds since UNIX epoch
+     * @param endTime   the end omf the time range, in milliseconds since UNIX epoch
      * @return a list of PatientRecord objects that fall within the specified time
      *         range
      */
     public List<PatientRecord> getRecords(long startTime, long endTime) {
-        // TODO Implement and test this method
-        List<PatientRecord> pr = new ArrayList<PatientRecord>();
-        return pr;
+        List<PatientRecord> result = new ArrayList<>();
+        for (PatientRecord record : patientRecords) {
+            if (record.getTimestamp() >= startTime && record.getTimestamp() <= endTime) {
+                result.add(record);
+            }
+        }
+        return result;
     }
 }
