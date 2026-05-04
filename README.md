@@ -60,6 +60,17 @@ java -jar target/6421883_6441424_cardio_data_simulator.jar --patient-count 100 -
 - `websocket:<port>`: Streams the simulated data to WebSocket clients connected to the specified port.
 - `tcp:<port>`: Streams the simulated data to TCP clients connected to the specified port.
 
+## UML Models
+
+This project includes UML class diagrams for key subsystems of the Cardio Health Monitoring System (CHMS). The diagrams are located in the [`uml_models/`](uml_models/) directory.
+
+| Subsystem | Diagram |
+|---|---|
+| Data Storage System | [data_storage_system.png](uml_models/data_storage_system.png) |
+| Patient Identification System | [patient_identification_system.png](uml_models/patient_identification_system.png) |
+
+Each diagram is accompanied by a written explanation of the design rationale. See [`uml_models/README.md`](uml_models/README.md) for details.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
