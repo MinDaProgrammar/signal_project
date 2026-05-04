@@ -2,30 +2,30 @@
 
 ## 1. Data Storage System
 
-![Data Storage System](data_storage_system.png)
+[Data Storage System](data_storage_system.png)
 
 ### Design Rationale
 
-The Data Storage System is designed around a clear separation between data ingestion, storage, and retrieval. At its core, `DataStorage` acts as the single entry point for all patient data management. It maintains a `Map<Integer, Patient>` that indexes all patients by their unique ID, enabling O(1) lookups when new measurements arrive or records are queried.
+The data storage subsystem is built around `DataStorage` as the central class. It holds a `Map<Integer, Patient>` to organise patient records by ID, and exposes methods like `addPatientData()`, `getRecords()`, and `getAllPatients()` for the rest of the system to use.
 
-The `Patient` class serves as an aggregate root, owning a list of `PatientRecord` objects. Each `PatientRecord` is an immutable value object that captures a single measurement — its type (e.g., "BloodPressure"), numeric value, and timestamp. This composition hierarchy (DataStorage → Patient → PatientRecord) reflects the natural ownership chain: the storage owns patients, and patients own their records.
+The storage hierarchy has three layers: `DataStorage` at the top manages all patients, `Patient` groups all records belonging to one individual, and `PatientRecord` represents a single measurement — its type (e.g. blood pressure), value, and timestamp. This reflects a natural one-to-many ownership: one storage holds many patients, and one patient holds many records.
 
-The `DataReader` interface decouples the storage layer from the source of incoming data. Any class that can produce patient records — whether reading from a file, a TCP stream, or a WebSocket — simply implements `readData(DataStorage)`. The `FileDataReader` is a concrete implementation that parses the simulator's file output and populates `DataStorage` accordingly. This design follows the Dependency Inversion Principle, keeping the storage logic independent of how data arrives.
+The `DataReader` interface separates the concern of reading data from the storage itself. Any class that supplies patient data — whether from a file, TCP stream, or WebSocket — implements `readData(DataStorage)`. `FileDataReader` is the concrete implementation that handles file-based input, using `parseLine()` to process each line from the simulator's output directory and load it into storage. This keeps the storage layer unaware of where data physically comes from.
 
-The `DataRetriever` class provides a clean query API for medical staff, offering time-range queries and latest-record lookups without exposing the internal map structure. This separation of write responsibility (DataReader) from read responsibility (DataRetriever) supports the Single Responsibility Principle and makes the system easier to extend — for example, adding caching or access control to retrieval without touching storage logic.
+`DataRetriever` is a separate query class for retrieving records on behalf of medical staff. Separating read queries (`DataRetriever`) from data ingestion (`DataReader`) keeps each class focused on a single responsibility, and makes it easier to extend either side independently in the future.
 
 ---
 
 ## 2. Patient Identification System
 
-![Patient Identification System](patient_identification_system.png)
+[Patient Identification System](patient_identification_system.png)
 
 ### Design Rationale
 
-The Patient Identification System ensures that every incoming data point is correctly linked to a verified hospital patient. The central orchestrator is `IdentityManager`, which coordinates between the identification logic and the data storage layer. It exposes a `verifyAndLink()` method that validates a patient record against the hospital database before it is accepted into storage, and a `handleMismatch()` method for cases where no matching patient is found.
+The patient identification subsystem is responsible for verifying that incoming data is correctly linked to a real hospital patient before it enters the system. `IdentityManager` is the central class that coordinates this process. It holds references to both `PatientIdentifier` and `DataStorage`, and exposes `verifyAndLink()` to validate a record, `handleMismatch()` for cases where no match is found, and `getAuditLog()` to keep a trace of identity checks.
 
-`PatientIdentifier` encapsulates the matching logic, maintaining a map of known `HospitalPatient` records indexed by patient ID. Its `matchPatient()` method returns the corresponding hospital record, while `isValidId()` provides a lightweight pre-check. This separation means the identity matching strategy can be swapped or mocked in tests without affecting `IdentityManager`.
+`PatientIdentifier` handles the actual matching logic. It maintains a `Map<Integer, HospitalPatient>` of known hospital records and provides `matchPatient()` to look up a patient by ID, `isValidId()` for a quick pre-check, and `registerPatient()` to add new patients. Keeping this logic in a separate class means `IdentityManager` stays focused on orchestration rather than getting involved in lookup details.
 
-`HospitalPatient` represents a patient's real hospital record — including name, date of birth, and medical history. It is kept separate from the simulator's `Patient` class deliberately: the hospital record is a source-of-truth entity from an external system, while `Patient` in the data management package is a runtime container for incoming measurements.
+`HospitalPatient` models the real hospital record for a patient, containing fields like name, date of birth, and medical history. This is intentionally kept separate from the `Patient` class in the data management package — `HospitalPatient` represents verified identity information from the hospital's database, while `Patient` is just a runtime container for simulator measurements.
 
-`DataStorage` and `PatientRecord` are shown as external components (in grey) to make clear that the identification system depends on them but does not own them. This boundary enforces separation of concerns: the identification system validates and routes data, while the storage system manages persistence. Together they ensure data integrity — only verified, matched records are ever written to storage, reducing the risk of orphaned or misattributed patient data.
+`DataStorage` and `PatientRecord` appear in grey in the diagram to indicate they are external to this subsystem — they are defined in the Data Storage subsystem and included here only to show that `IdentityManager` depends on them when routing validated data into storage.
