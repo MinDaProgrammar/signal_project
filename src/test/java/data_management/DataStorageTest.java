@@ -13,6 +13,7 @@ class DataStorageTest {
 
     @BeforeEach
     void setUp() {
+        // Reset the singleton before each test so tests don't share state
         DataStorage.resetInstance();
     }
 
