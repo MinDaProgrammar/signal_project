@@ -1,0 +1,118 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="DataAccess" name="페이지-1">
+    <mxGraphModel dx="1258" dy="716" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DL" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" value="«interface»&#xa;DataListener" vertex="1">
+          <mxGeometry height="100" width="260" x="280" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DLa" parent="DL" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="" vertex="1">
+          <mxGeometry height="10" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="DLs" parent="DL" style="line;strokeColor=#9673a6;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="260" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="DLm" parent="DL" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+start(storage: DataStorage): void&#xa;+stop(): void&#xa;+onRawMessage(payload: String): void" vertex="1">
+          <mxGeometry height="52" width="260" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="TCP" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="TCPDataListener" vertex="1">
+          <mxGeometry height="156" width="240" x="10" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="TCPa" parent="TCP" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="-adapter: DataSourceAdapter&#xa;-port: int" vertex="1">
+          <mxGeometry height="52" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TCPs" parent="TCP" style="line;strokeColor=#6c8ebf;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="240" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="TCPm" parent="TCP" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+TCPDataListener(port: int, adapter: DataSourceAdapter)&#xa;+start(storage: DataStorage): void&#xa;+onRawMessage(payload: String): void&#xa;+stop(): void" vertex="1">
+          <mxGeometry height="74" width="240" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="WS" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="WebSocketDataListener" vertex="1">
+          <mxGeometry height="156" width="260" x="280" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="WSa" parent="WS" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="-adapter: DataSourceAdapter&#xa;-serverUri: String" vertex="1">
+          <mxGeometry height="52" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WSs" parent="WS" style="line;strokeColor=#6c8ebf;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="260" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="WSm" parent="WS" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+WebSocketDataListener(uri: String, adapter: DataSourceAdapter)&#xa;+start(storage: DataStorage): void&#xa;+onRawMessage(payload: String): void&#xa;+stop(): void" vertex="1">
+          <mxGeometry height="74" width="260" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="FIL" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="FileDataListener" vertex="1">
+          <mxGeometry height="156" width="240" x="570" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="FILa" parent="FIL" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="-adapter: DataSourceAdapter&#xa;-watchDirectory: String" vertex="1">
+          <mxGeometry height="52" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FILs" parent="FIL" style="line;strokeColor=#6c8ebf;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="240" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="FILm" parent="FIL" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+FileDataListener(dir: String, adapter: DataSourceAdapter)&#xa;+start(storage: DataStorage): void&#xa;+onRawMessage(payload: String): void&#xa;+stop(): void" vertex="1">
+          <mxGeometry height="74" width="240" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="PAR" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="DataParser" vertex="1">
+          <mxGeometry height="156" width="260" x="10" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="PARa" parent="PAR" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="-format: String" vertex="1">
+          <mxGeometry height="30" width="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PARs" parent="PAR" style="line;strokeColor=#6c8ebf;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="260" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PARm" parent="PAR" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+DataParser(format: String)&#xa;+parseLine(line: String): PatientRecord&#xa;+validate(raw: String): boolean" vertex="1">
+          <mxGeometry height="96" width="260" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="ADP" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="DataSourceAdapter" vertex="1">
+          <mxGeometry height="156" width="280" x="320" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="ADPa" parent="ADP" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="-parser: DataParser" vertex="1">
+          <mxGeometry height="30" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ADPs" parent="ADP" style="line;strokeColor=#6c8ebf;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="280" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ADPm" parent="ADP" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+DataSourceAdapter(parser: DataParser)&#xa;+ingestRaw(line: String, storage: DataStorage): void&#xa;-logMalformed(raw: String): void" vertex="1">
+          <mxGeometry height="96" width="280" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="DSx" parent="1" style="swimlane;fontStyle=1;align=center;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;" value="DataStorage" vertex="1">
+          <mxGeometry height="156" width="240" x="640" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="DSxa" parent="DSx" style="text;strokeColor=none;fillColor=#EBF2FA;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="-patientMap: Map&lt;Integer, Patient&gt;" vertex="1">
+          <mxGeometry height="30" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="DSxs" parent="DSx" style="line;strokeColor=#666666;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="2" width="240" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DSxm" parent="DSx" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;" value="+addPatientData(id, val, type, ts): void&#xa;+getRecords(id, start, end): List&#xa;+getAllPatients(): List&lt;Patient&gt;" vertex="1">
+          <mxGeometry height="96" width="240" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="eI1" edge="1" parent="1" source="TCP" style="endArrow=block;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="DL" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eI2" edge="1" parent="1" source="WS" style="endArrow=block;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="DL" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eI3" edge="1" parent="1" source="FIL" style="endArrow=block;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="DL" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eU1" edge="1" parent="1" source="TCP" style="endArrow=open;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="ADP" value="«uses»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eU2" edge="1" parent="1" source="WS" style="endArrow=open;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="ADP" value="«uses»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eU3" edge="1" parent="1" source="FIL" style="endArrow=open;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="ADP" value="«uses»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eU4" edge="1" parent="1" source="ADP" style="endArrow=open;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="PAR" value="«uses»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eU5" edge="1" parent="1" source="ADP" style="endArrow=open;endFill=0;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="DSx" value="«writes to»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

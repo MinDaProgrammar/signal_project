@@ -64,12 +64,14 @@ java -jar target/6421883_6441424_cardio_data_simulator.jar --patient-count 100 -
 
 This project includes UML class diagrams for key subsystems of the Cardio Health Monitoring System (CHMS). The diagrams are located in the [`uml_models/`](uml_models/) directory.
 
-| Subsystem | Diagram |
+| Subsystem | Diagram (Draw.io) |
 |---|---|
-| Data Storage System | [data_storage_system.png](uml_models/data_storage_system.png) |
-| Patient Identification System | [patient_identification_system.png](uml_models/patient_identification_system.png) |
+| Data Storage System | [data_storage_system.drawio](uml_models/data_storage_system.drawio) |
+| Patient Identification System | [patient_identification_system.drawio](uml_models/patient_identification_system.drawio) |
+| Alert Generation System | [alert_generation_system.drawio](uml_models/alert_generation_system.drawio) |
+| Data Access Layer | [data_access_layer.drawio](uml_models/data_access_layer.drawio) |
 
-Each diagram is accompanied by a written explanation of the design rationale. See [`uml_models/README.md`](uml_models/README.md) for details.
+Each diagram is accompanied by a written explanation of the design rationale. See [`uml_models/README.md`](uml_models/README.md) for details. Export PNG/PDF from [diagrams.net](https://app.diagrams.net) if a submission asks for a raster image.
 
 ## License
 
