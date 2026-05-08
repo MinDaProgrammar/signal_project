@@ -1,6 +1,6 @@
 package alerts;
 
-import com.alerts.Alert;
+import com.alerts.*;
 import com.alerts.AlertGenerator;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
@@ -213,6 +213,84 @@ class AlertGeneratorTest {
         alertGenerator.evaluateData(patient);
 
         assertFalse(containsCondition(alertGenerator.getTriggeredAlerts(), "ManualAlert"));
+    }
+
+    // Robustness/boundary tests
+
+    @Test
+    void testNoAlertsForEmptyRecords() {
+        Patient patient = new Patient(6);
+        alertGenerator.evaluateData(patient);
+        assertTrue(alertGenerator.getTriggeredAlerts().isEmpty());
+    }
+
+    @Test
+    void testNoAlertsForIrrelevantRecordTypes() {
+        Patient patient = new Patient(6);
+        patient.addRecord(75.0, "HeartRate", 1000L);
+        patient.addRecord(36.6, "Temperature", 1000L);
+
+        alertGenerator.evaluateData(patient);
+
+        assertTrue(alertGenerator.getTriggeredAlerts().isEmpty());
+    }
+
+    @Test
+    void testSystolicExactlyAtLowerThresholdDoesNotAlert() {
+        // 90 is the boundary — only <90 should trigger
+        Patient patient = new Patient(6);
+        patient.addRecord(90, "SystolicPressure", 1000L);
+
+        alertGenerator.evaluateData(patient);
+
+        assertFalse(containsCondition(alertGenerator.getTriggeredAlerts(), "CriticalSystolicPressure"));
+    }
+
+    @Test
+    void testSaturationExactlyAt92DoesNotAlert() {
+        // 92 is the boundary — only <92 should trigger
+        Patient patient = new Patient(6);
+        patient.addRecord(92, "Saturation", 1000L);
+
+        alertGenerator.evaluateData(patient);
+
+        assertFalse(containsCondition(alertGenerator.getTriggeredAlerts(), "LowSaturation"));
+    }
+
+    @Test
+    void testBloodPressureAlertIsCorrectSubtype() {
+        Patient patient = new Patient(7);
+        patient.addRecord(185, "SystolicPressure", 1000L);
+
+        alertGenerator.evaluateData(patient);
+
+        Alert alert = alertGenerator.getTriggeredAlerts().get(0);
+        assertInstanceOf(BloodPressureAlert.class, alert);
+    }
+
+    @Test
+    void testBloodOxygenAlertIsCorrectSubtype() {
+        Patient patient = new Patient(7);
+        patient.addRecord(88, "Saturation", 1000L);
+
+        alertGenerator.evaluateData(patient);
+
+        Alert alert = alertGenerator.getTriggeredAlerts().get(0);
+        assertInstanceOf(BloodOxygenAlert.class, alert);
+    }
+
+    @Test
+    void testECGAlertIsCorrectSubtype() {
+        Patient patient = new Patient(7);
+        for (int i = 0; i < 10; i++) {
+            patient.addRecord(1.0, "ECG", 1000L + i * 100);
+        }
+        patient.addRecord(3.0, "ECG", 2000L);
+
+        alertGenerator.evaluateData(patient);
+
+        assertTrue(alertGenerator.getTriggeredAlerts().stream()
+                .anyMatch(a -> a instanceof ECGAlert));
     }
 
     // Helper to check if any of the alerts in the list matches a condition name
