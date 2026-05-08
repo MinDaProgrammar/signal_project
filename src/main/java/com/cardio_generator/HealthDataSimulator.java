@@ -30,6 +30,30 @@ import com.cardio_generator.outputs.WebSocketOutputStrategy;
  */
 public class HealthDataSimulator {
 
+    // ── Singleton ────────────────────────────────────────────────────────────
+
+    private static HealthDataSimulator instance;
+
+    /**
+     * Private constructor — use {@link #getInstance()} to obtain the shared instance.
+     */
+    private HealthDataSimulator() {}
+
+    /**
+     * Returns the single shared instance of {@code HealthDataSimulator}.
+     * Thread-safe via synchronization.
+     *
+     * @return the singleton instance
+     */
+    public static synchronized HealthDataSimulator getInstance() {
+        if (instance == null) {
+            instance = new HealthDataSimulator();
+        }
+        return instance;
+    }
+
+    // ── Simulator state ──────────────────────────────────────────────────────
+
     private static int patientCount = 50; // Default number of patients
     private static ScheduledExecutorService scheduler;
     private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
