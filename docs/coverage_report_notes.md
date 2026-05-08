@@ -1,16 +1,18 @@
-# Code Coverage Report — Part 3
+# Code Coverage Report Notes
 
-![Coverage Report](coverage_report.png)
+The overall coverage came out to 49% for instructions and 61% for branches. The screenshot of the full report is included as `coverage_report.png`.
 
-## Summary
+## What was well tested
 
-Overall coverage is 18% instructions and 26% branches. The coverage breakdown by package reflects the scope of testing for this part of the project.
+The two packages we focused on — `com.alerts` (97%) and `com.data_management` (78%) — have good coverage because these are the parts we actually implemented and wrote unit tests for. Things like alert generation, data storage, file reading, and the WebSocket client all have dedicated test classes.
 
-**com.data_management — 81% instruction coverage, 76% branch coverage**
-This is the package targeted by our tests. `DataStorage`, `Patient`, `PatientRecord`, and `FileDataReader` are all covered. The remaining uncovered portion is the `DataStorage.main()` method, which is a demonstration entry point and was not tested since it requires a fully wired `DataReader` implementation at runtime.
+## What wasn't tested and why
 
-**com.cardio_generator, com.cardio_generator.generators, com.cardio_generator.outputs — 0%**
-These packages contain the simulator classes provided as part of the project (e.g. `HealthDataSimulator`, `BloodPressureDataGenerator`, `FileOutputStrategy`). Testing these was not required for Part 3 — they were part of the given codebase and their behaviour is verified by running the simulator directly.
+**com.cardio_generator.generators (0%)**
+These are the data generator classes that produce random ECG, blood pressure, and saturation values on a timer. We didn't write tests for these because the output is random and time-based, which makes unit testing them unreliable and not very meaningful.
 
-**com.alerts — 0%**
-The `AlertGenerator` and `Alert` classes contain only stub implementations at this stage (`evaluateData` is empty). Tests for alert logic are being implemented as part of a separate workstream and will be included in a future commit.
+**com.cardio_generator (5%)**
+This is mostly `HealthDataSimulator`, which starts up a thread scheduler and reads command-line arguments. It's hard to unit test something that spins up multiple threads and requires ports to be open, so we left this untested.
+
+**com.cardio_generator.outputs (19%)**
+Some of the output classes like `WebSocketOutputStrategy` and `TcpOutputStrategy` need a real network connection to work, so we couldn't test them in a normal unit test. The decorator classes we added (`TimestampValidationDecorator`, `PriorityOutputDecorator`) are tested in `OutputDecoratorTest`.
