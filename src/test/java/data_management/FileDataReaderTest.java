@@ -87,4 +87,52 @@ class FileDataReaderTest {
         assertEquals(1, records.size());
         assertEquals(75.0, records.get(0).getMeasurementValue());
     }
+
+    @Test
+    void testSkipsAlertWithMissingDataField() throws IOException {
+        File file = tempDir.resolve("Alert.txt").toFile();
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write("Patient ID: 1, Timestamp: 1000, Label: Alert, Data: \n");
+            fw.write("Patient ID: 1, Timestamp: 2000, Label: HeartRate, Data: 80.0\n");
+        }
+
+        DataStorage storage = DataStorage.getInstance();
+        new FileDataReader(tempDir.toString()).readData(storage);
+
+        List<PatientRecord> records = storage.getRecords(1, 0L, Long.MAX_VALUE);
+        assertEquals(1, records.size());
+        assertEquals("HeartRate", records.get(0).getRecordType());
+    }
+
+    @Test
+    void testSkipsAlertWithGarbageDataField() throws IOException {
+        File file = tempDir.resolve("Alert.txt").toFile();
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write("Patient ID: 1, Timestamp: 1000, Label: Alert, Data: ???!!!\n");
+            fw.write("Patient ID: 1, Timestamp: 2000, Label: Saturation, Data: 96.0%\n");
+        }
+
+        DataStorage storage = DataStorage.getInstance();
+        new FileDataReader(tempDir.toString()).readData(storage);
+
+        List<PatientRecord> records = storage.getRecords(1, 0L, Long.MAX_VALUE);
+        assertEquals(1, records.size());
+        assertEquals("Saturation", records.get(0).getRecordType());
+    }
+
+    @Test
+    void testSkipsAlertWithInvalidPatientId() throws IOException {
+        File file = tempDir.resolve("Alert.txt").toFile();
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write("Patient ID: abc, Timestamp: 1000, Label: Alert, Data: triggered\n");
+            fw.write("Patient ID: 1, Timestamp: 2000, Label: HeartRate, Data: 72.0\n");
+        }
+
+        DataStorage storage = DataStorage.getInstance();
+        new FileDataReader(tempDir.toString()).readData(storage);
+
+        List<PatientRecord> records = storage.getRecords(1, 0L, Long.MAX_VALUE);
+        assertEquals(1, records.size());
+        assertEquals("HeartRate", records.get(0).getRecordType());
+    }
 }
