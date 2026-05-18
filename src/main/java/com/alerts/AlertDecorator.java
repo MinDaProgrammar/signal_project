@@ -1,10 +1,15 @@
 package com.alerts;
 
 /**
- * Abstract base decorator for {@link Alert}.
+ * Abstract base decorator for {@link Alert} — this is the Part 4 Decorator Pattern deliverable.
  *
- * <p>Follows the Decorator pattern: wraps an existing {@code Alert} instance and
- * delegates the core identity ({@code patientId}, {@code timestamp}) to it.
+ * Note: a separate decorator hierarchy exists in com.cardio_generator.outputs
+ * (OutputDecorator, TimestampValidationDecorator, PriorityOutputDecorator) which decorates
+ * OutputStrategy. That hierarchy was added as an independent improvement to the output pipeline
+ * and is not the Part 4 submission.
+ *
+ * Follows the Decorator pattern: wraps an existing {@link Alert} instance and
+ * delegates the core identity (patientId, timestamp) to it.
  * Concrete subclasses override {@link #getCondition()} to append or modify the
  * alert description without changing the original alert object.</p>
  *

@@ -73,6 +73,15 @@ This project includes UML class diagrams for key subsystems of the Cardio Health
 
 Each diagram is accompanied by a written explanation of the design rationale. See [`uml_models/README.md`](uml_models/README.md) for details. Export PNG/PDF from [diagrams.net](https://app.diagrams.net) if a submission asks for a raster image.
 
+## Design Patterns (Part 4)
+
+Four design patterns are implemented in this project:
+
+- **Singleton** — `DataStorage` and `HealthDataSimulator` each expose a `getInstance()` method to ensure only one instance exists at runtime.
+- **Factory Method** — `AlertFactory` is the base class; `BloodPressureAlertFactory`, `BloodOxygenAlertFactory`, and `ECGAlertFactory` each produce the appropriate `Alert` subtype.
+- **Strategy** — `AlertStrategy` defines the interface; `BloodPressureStrategy`, `OxygenSaturationStrategy`, and `HeartRateStrategy` each encapsulate a different alert-checking algorithm.
+- **Decorator** — `AlertDecorator` (in `com.alerts`) is the Part 4 deliverable. `PriorityAlertDecorator` tags an alert with a priority level and `RepeatedAlertDecorator` annotates it with a repeat count and interval. A separate decorator hierarchy exists in `com.cardio_generator.outputs` (`OutputDecorator`, `TimestampValidationDecorator`, `PriorityOutputDecorator`) as an independent improvement to the output pipeline — it is not the Part 4 submission.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
